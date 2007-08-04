@@ -54,7 +54,7 @@ var omploader = {
 	postData.addContentLength = true;
 	postData.setData(stringStream);
 
-	gBrowser.addTab("http://test.peemail.org/upload", uri, null, postData);
+	gBrowser.addTab("http://omploader.org/upload", uri, null, postData);
   },
   onToolbarButtonCommand: function(e) {
     // just reuse the function above.  you can change this, obviously!
