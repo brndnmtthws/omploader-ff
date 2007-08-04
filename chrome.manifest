@@ -1,0 +1,5 @@
+content	omploader	content/
+locale	omploader	en-US	locale/en-US/
+skin	omploader	classic/1.0	skin/
+overlay	chrome://browser/content/browser.xul	chrome://omploader/content/firefoxOverlay.xul
+style	chrome://global/content/customizeToolbar.xul	chrome://omploader/skin/overlay.css

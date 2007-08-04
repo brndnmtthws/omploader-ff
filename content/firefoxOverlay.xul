@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://omploader/skin/overlay.css" type="text/css"?>
+<!DOCTYPE overlay SYSTEM "chrome://omploader/locale/omploader.dtd">
+<overlay id="omploader-overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script src="overlay.js"/>
+  <stringbundleset id="stringbundleset">
+    <stringbundle id="omploader-strings" src="chrome://omploader/locale/omploader.properties"/>
+  </stringbundleset>
+
+  <menupopup id="menu_ToolsPopup">
+    <menuitem id="omploader-tools" label="&omploader.label;" 
+              oncommand="omploader.onMenuItemCommand(event);"/>
+  </menupopup>
+  <popup id="contentAreaContextMenu">
+    <menuitem id="context-omploader" label="&omploaderContext.label;"
+              accesskey="&omploaderContext.accesskey;"
+              insertafter="context-stop"
+              oncommand="omploader.onMenuItemCommand(event)"/>
+  </popup>
+  <toolbarpalette id="BrowserToolbarPalette">
+  <toolbarbutton id="omploader-toolbar-button"
+    label="&omploaderToolbar.label;"
+    tooltiptext="&omploaderToolbar.tooltip;"
+    oncommand="omploader.onToolbarButtonCommand()"
+    class="toolbarbutton-1 chromeclass-toolbar-additional"/>
+  </toolbarpalette>
+</overlay>
