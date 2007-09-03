@@ -11,6 +11,8 @@
 var omploader = {
 	onLoad: function() {
 		// initialization code
+		this.Cc = Components.classes;
+		this.Ci = Components.interfaces;
 		this.initialized = true;
 		this.strings = document.getElementById("omploader-strings");
 	},
@@ -58,36 +60,26 @@ var omploader = {
 	},
 
 	onMenuItemURLCommand: function(url) {
-		const Cc = Components.classes;
-		const Ci = Components.interfaces;
-
 		var ioService =
-		Cc['@mozilla.org/network/io-service;1'].getService(Ci.nsIIOService);
+		this.Cc['@mozilla.org/network/io-service;1'].getService(this.Ci.nsIIOService);
 
 		this.onContextMenuItemCommand(ioService.newURI(url, null, null));
 	},
 	onMenuItemCommand: function(e) {
 		var uri;
-		const Cc = Components.classes;
-		const Ci = Components.interfaces;
-		if (gContextMenu.onImage)
-			uri = gContextMenu.target.currentURI;
-		else if (gContextMenu.onLink)
-			uri = gContextMenu.linkURI;
-		else {
-			var whut;
-			whut = content.document.location.href;
-			var ioService =
-				Cc['@mozilla.org/network/io-service;1'].getService(Ci.nsIIOService);
+		var whut;
+		
+		whut = content.document.location.href;
+		var ioService =
+			this.Cc['@mozilla.org/network/io-service;1'].getService(this.Ci.nsIIOService);
 			uri = ioService.newURI(whut, null, null);
-		}
 
-		omploader.ompLoadURI(uri);
+		this.ompLoadURI(uri);
 	},
 
 	onToolbarButtonCommand: function(e) {
 		// just reuse the function above.	you can change this, obviously!
-		omploader.onMenuItemCommand(e);
+		this.onMenuItemCommand(e);
 	},
 
 	updateToolsPopup: function(e) {

@@ -10,7 +10,7 @@
 
   <menupopup id="menu_ToolsPopup" onpopupshowing="omploader.updateToolsPopup(event)">
     <menuitem id="omploader-tools" label="&omploader.label;" 
-              oncommand="omploader.onMenuItemCommand(event);"/>
+              oncommand="omploader.onMenuItemCommand(event)"/>
   </menupopup>
 	
 	<popup id="contentAreaContextMenu">
@@ -31,7 +31,7 @@
   <toolbarbutton id="omploader-toolbar-button"
     label="&omploaderToolbar.label;"
     tooltiptext="&omploaderToolbar.tooltip;"
-    oncommand="omploader.onToolbarButtonCommand()"
+    oncommand="omploader.onToolbarButtonCommand(event)"
     class="toolbarbutton-1 chromeclass-toolbar-additional"/>
   </toolbarpalette>
 </overlay>
