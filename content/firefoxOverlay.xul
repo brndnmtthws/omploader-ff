@@ -8,16 +8,25 @@
     <stringbundle id="omploader-strings" src="chrome://omploader/locale/omploader.properties"/>
   </stringbundleset>
 
-  <menupopup id="menu_ToolsPopup">
+  <menupopup id="menu_ToolsPopup" onpopupshowing="omploader.updateToolsPopup(event)">
     <menuitem id="omploader-tools" label="&omploader.label;" 
               oncommand="omploader.onMenuItemCommand(event);"/>
   </menupopup>
-  <popup id="contentAreaContextMenu">
-    <menuitem id="context-omploader" label="&omploaderContext.label;"
-              accesskey="&omploaderContext.accesskey;"
-              insertafter="context-stop"
-              oncommand="omploader.onMenuItemCommand(event)"/>
-  </popup>
+	
+	<popup id="contentAreaContextMenu">
+		<menu id="context-omploader" label="&omploaderContext.label;" insertafter="context-stop" accesskey="&omploaderContext.accesskey;">
+			<menupopup id="context-omploader-popup-menu" onpopupshowing="omploader.showContextMenu(event)">
+				<menuitem id="omploader-image-menuitem"
+					label="&omploaderContext.imagelabel;"/>
+				<menuitem id="omploader-bgimage-menuitem"
+					label="&omploaderContext.bgimagelabel;"/>
+				<menuitem id="omploader-link-menuitem"
+					label="&omploaderContext.linklabel;"/>
+				<menuitem id="omploader-page-menuitem"
+					label="&omploaderContext.pagelabel;"/>
+			</menupopup>
+		</menu>
+	</popup>
   <toolbarpalette id="BrowserToolbarPalette">
   <toolbarbutton id="omploader-toolbar-button"
     label="&omploaderToolbar.label;"
