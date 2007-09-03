@@ -10,11 +10,14 @@
 
   <menupopup id="menu_ToolsPopup" onpopupshowing="omploader.updateToolsPopup(event)">
     <menuitem id="omploader-tools" label="&omploader.label;" 
-              oncommand="omploader.onMenuItemCommand(event)"/>
+              oncommand="omploader.onMenuItemCommand(event)"
+	      accesskey="&omploaderContext.accesskey;"
+	      class="menuitem-iconic"/>
   </menupopup>
 	
 	<popup id="contentAreaContextMenu">
-		<menu id="context-omploader" label="&omploaderContext.label;" insertafter="context-stop" accesskey="&omploaderContext.accesskey;">
+		<menu id="context-omploader" label="&omploaderContext.label;" insertafter="context-stop" accesskey="&omploaderContext.accesskey;"
+		class="menu-iconic">
 			<menupopup id="context-omploader-popup-menu" onpopupshowing="omploader.showContextMenu(event)">
 				<menuitem id="omploader-image-menuitem"
 					label="&omploaderContext.imagelabel;"/>
