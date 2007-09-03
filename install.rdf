@@ -7,6 +7,7 @@
     <em:version>0.1</em:version>
     <em:creator>Steve French</em:creator>
     <em:contributor>Joe Myre</em:contributor>
+    <em:contributor>Brenden Matthews</em:contributor>
     <em:homepageURL>http://omploader.org</em:homepageURL>
     <em:iconURL>chrome://omploader/content/omploader.png</em:iconURL>
     <em:targetApplication>
