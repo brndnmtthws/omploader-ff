@@ -3,6 +3,7 @@
  *
  * Copyright 2007 David Shakaryan <omp@gentoo.org>
  * Copyright 2007 Brenden Matthews <brenden@rty.ca>
+ * Copyright 2007 Jeff Glover <jeff.web@sigmatheory.com>
  *
  * Distributed under the terms of the GNU General Public License v3
  *
@@ -11,8 +12,18 @@
 var omploader = {
 	onLoad: function() {
 		// initialization code
+		this.postVars = new Array();
+		this.postVars['url'] = "url1=";
+		this.postVars['file'] = "file1="; // one day this may useful
+
+		this.ompURL = "http://omploader.org/upload";
+// 		this.ompURL = "http://test.peemail.org/upload"; // for testing
+
 		this.Cc = Components.classes;
 		this.Ci = Components.interfaces;
+		this.ioService =
+			this.Cc['@mozilla.org/network/io-service;1'].getService(this.Ci.nsIIOService);
+
 		this.initialized = true;
 		this.strings = document.getElementById("omploader-strings");
 	},
@@ -51,7 +62,6 @@ var omploader = {
 			menuLink.hidden = true;
 	
 		menuPage.setAttribute("tooltiptext", content.document.location.href);
-		menuPage.setAttribute("oncommand", "onMenuItemURLCommand(content.document.location.href)");
 	},
 
 	onContextMenuItemCommand: function(uri) {
@@ -60,59 +70,53 @@ var omploader = {
 	},
 
 	onMenuItemURLCommand: function(url) {
-		var ioService =
-		this.Cc['@mozilla.org/network/io-service;1'].getService(this.Ci.nsIIOService);
-
-		this.onContextMenuItemCommand(ioService.newURI(url, null, null));
+		this.onContextMenuItemCommand(this.ioService.newURI(url, null, null));
 	},
+
 	onMenuItemCommand: function(e) {
 		var uri;
-		var whut;
-		
-		whut = content.document.location.href;
-		var ioService =
-			this.Cc['@mozilla.org/network/io-service;1'].getService(this.Ci.nsIIOService);
-			uri = ioService.newURI(whut, null, null);
+
+		uri = this.ioService.newURI(content.document.location.href, null, null);
 
 		this.ompLoadURI(uri);
 	},
 
 	onToolbarButtonCommand: function(e) {
-		// just reuse the function above.	you can change this, obviously!
 		this.onMenuItemCommand(e);
 	},
 
 	updateToolsPopup: function(e) {
 		var menuTools = document.getElementById("omploader-tools");
 		menuTools.setAttribute("tooltiptext", content.document.location.href);
-		
-// 		var toolBar = document.getElementById("omploader-toolbar-button");		
-// 		toolBar.setAttribute("tooltiptext", this.strings.getString("omploaderLabel") + " " + content.document.location.href);
 	},
 
 	ompLoadURI: function(uri) {
-		const Cc = Components.classes;
-		const Ci = Components.interfaces;
-		var dataString = "url1=" + uri.spec;
-	
-		// POST method requests must wrap the encoded text in a MIME
-		// stream
-		var stringStream = Cc["@mozilla.org/io/string-input-stream;1"].
-			createInstance(Ci.nsIStringInputStream);
-		if ("data" in stringStream) // Gecko 1.9 or newer
-			stringStream.data = dataString;
-		else // 1.8 or older
-			stringStream.setData(dataString, dataString.length);
-	
-		var postData = Cc["@mozilla.org/network/mime-input-stream;1"].
-			createInstance(Ci.nsIMIMEInputStream);
-		postData.addHeader("Content-Type", "application/x-www-form-urlencoded");
-		postData.addContentLength = true;
-		postData.setData(stringStream);
-	
-		gBrowser.addTab("http://omploader.org/upload", uri, null, postData);
+		if(uri.scheme == "file")
+			alert("Ompload does not yet support omploading local files.\n\nUser contributions are welcome. If you are interested in helping omploader, http://developer.mozilla.org/en/docs/XMLHttpRequest may be a good start to omplement this feature. In addition the ImageBot extension (http://pimpsofpain.com/imagebot.html) also uses similar functionality.");
+
+		else {
+			var dataString = this.postVars['url'] + uri.spec;
+		
+			// POST method requests must wrap the encoded text in a MIME
+			// stream
+			var stringStream = this.Cc["@mozilla.org/io/string-input-stream;1"].
+				createInstance(this.Ci.nsIStringInputStream);
+			if ("data" in stringStream) // Gecko 1.9 or newer
+				stringStream.data = dataString;
+			else // 1.8 or older
+				stringStream.setData(dataString, dataString.length);
+		
+			var postData = this.Cc["@mozilla.org/network/mime-input-stream;1"].
+				createInstance(this.Ci.nsIMIMEInputStream);
+			postData.addHeader("Content-Type", "application/x-www-form-urlencoded");
+			postData.addContentLength = true;
+			postData.setData(stringStream);
+		
+			gBrowser.addTab(this.ompURL, uri, null, postData);
+		}
 	}
 
 };
+
 window.addEventListener("load", function(e) { omploader.onLoad(e); }, false);
 

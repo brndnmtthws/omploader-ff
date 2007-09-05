@@ -26,7 +26,8 @@
 				<menuitem id="omploader-link-menuitem"
 					label="&omploaderContext.linklabel;"/>
 				<menuitem id="omploader-page-menuitem"
-					label="&omploaderContext.pagelabel;"/>
+					label="&omploaderContext.pagelabel;"
+					oncommand="omploader.onMenuItemCommand(event)"/>
 			</menupopup>
 		</menu>
 	</popup>
