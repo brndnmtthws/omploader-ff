@@ -238,7 +238,7 @@ var omploader = {
 
 		var refuri = this.ioService.newURI(this.ompFileURL, null, null);
 
-		gBrowser.addTab(this.ompFileURL, refuri, null, postData);
+		gBrowser.addTab(this.ompURL, refuri, null, postData);
 	},
 	
 	getStreamData: function(nsIFile_file) {
