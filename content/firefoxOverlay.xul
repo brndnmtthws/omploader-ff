@@ -18,7 +18,7 @@
 	<popup id="contentAreaContextMenu">
 		<menu id="context-omploader" label="&omploaderContext.label;" insertafter="context-stop" accesskey="&omploaderContext.accesskey;"
 		class="menu-iconic">
-			<menupopup id="context-omploader-popup-menu" onpopupshowing="omploader.showContextMenu(event)">
+			<menupopup id="context-omploader-popup-menu">
 				<menuitem id="omploader-image-menuitem"
 					label="&omploaderContext.imagelabel;"/>
 				<menuitem id="omploader-bgimage-menuitem"
