@@ -161,7 +161,7 @@ var omploader = {
 		}
 
 		else {
-			var dataString = this.postVars['url'] + "=" + uri.spec;
+			var dataString = this.postVars['url'] + "=\"" + uri.spec + "\"";
 		
 			// POST method requests must wrap the encoded text in a MIME
 			// stream
