@@ -20,8 +20,8 @@ var omploader = {
 		this.ompHost = "http://omploader.org";
 
 		this.ompURL = this.ompHost + "/upload";
-		
 		this.ompFileURL = this.ompHost + "/file";
+		this.ompPastaURL = this.ompHost + "/paste";
 
 		this.Cc = Components.classes;
 		this.Ci = Components.interfaces;
@@ -43,6 +43,7 @@ var omploader = {
 		var menuBGImage = document.getElementById("omploader-bgimage-menuitem");
 		var menuLink = document.getElementById("omploader-link-menuitem");
 		var menuPage = document.getElementById("omploader-page-menuitem");
+		var menuTextSelect = document.getElementById("omploader-textselect-menuitem");
 
 		var numVisibleMenuItems = 0;
 	
@@ -73,6 +74,17 @@ var omploader = {
 		}
 		else
 			menuLink.hidden = true;
+		
+		if (gContextMenu.isTextSelected)
+		{
+			numVisibleMenuItems++;
+			menuTextSelect.hidden = false;
+			menuTextSelect.setAttribute("tooltiptext",  getBrowserSelection());
+			menuTextSelect.setAttribute("oncommand", "omploader.ompLoadPasta(getBrowserSelection())");
+			
+		}
+		else
+			menuTextSelect.hidden = true;
 	
 		var pageuri = omploader.URLtoURI(content.document.location.href);
 
@@ -135,19 +147,45 @@ var omploader = {
 		var newTab = gBrowser.addTab(this.ompFileURL);
 		gBrowser.selectedTab = newTab;
 		
-		window.addEventListener("load", ompLoadEvent = function(e) { omploader.onLoadPageLoad(e, uri); }, true);
+		window.addEventListener("load", ompFileEvent = function(e) { omploader.onFilePageLoad(e, uri); }, true);
 		
 	},
 	
-	onLoadPageLoad: function(event, uri) {
+	onFilePageLoad: function(event, uri) {
 		if (event.originalTarget instanceof HTMLDocument) {
-			window.removeEventListener("load",  ompLoadEvent, true);
+			window.removeEventListener("load",  ompFileEvent, true);
 			var doc = event.originalTarget;
-			var filebox = doc.getElementsByTagName("input");
+			var element = doc.getElementsByTagName("input");
 			try {
-				for (var cnt = 0; cnt < filebox.length; cnt++) {
-					if (filebox[cnt].name == "file1")
-						filebox[cnt].value = uri.spec;
+				for (var cnt = 0; cnt < element.length; cnt++) {
+					if (element[cnt].name == "file1")
+						element[cnt].value = uri.spec;
+				}
+			} catch(e) {
+				// meh
+			}
+			
+		}
+
+	},
+	
+	ompLoadPasta: function(selection) {
+		var newTab = gBrowser.addTab(this.ompPastaURL);
+		gBrowser.selectedTab = newTab;
+		
+		window.addEventListener("load", ompPastaEvent = function(e) { omploader.onPastaPageLoad(e, selection); }, true);
+		
+	},
+	
+	onPastaPageLoad: function(event, selection) {
+		if (event.originalTarget instanceof HTMLDocument) {
+			window.removeEventListener("load",  ompPastaEvent, true);
+			var doc = event.originalTarget;
+			var element = doc.getElementsByTagName("textarea");
+			try {
+				for (var cnt = 0; cnt < element.length; cnt++) {
+					if (element[cnt].name == "paste")
+						element[cnt].value = selection;
 				}
 			} catch(e) {
 				// meh

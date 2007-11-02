@@ -5,5 +5,6 @@
 <!ENTITY omploaderContext.bgimagelabel "BG Image">
 <!ENTITY omploaderContext.linklabel "Link">
 <!ENTITY omploaderContext.pagelabel "Page">
+<!ENTITY omploaderContext.textselectlabel "Pasta selected text">
 <!ENTITY omploaderToolbar.label "Ompload!">
 <!ENTITY omploaderToolbar.tooltip "Ompload!">

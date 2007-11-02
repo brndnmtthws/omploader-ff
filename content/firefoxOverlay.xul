@@ -28,6 +28,8 @@
 				<menuitem id="omploader-page-menuitem"
 					label="&omploaderContext.pagelabel;"
 					oncommand="omploader.onMenuItemCommand(event)"/>
+				<menuitem id="omploader-textselect-menuitem"
+					label="&omploaderContext.textselectlabel;"/>
 			</menupopup>
 		</menu>
 	</popup>
