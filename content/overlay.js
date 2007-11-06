@@ -86,7 +86,7 @@ var omploader = {
 			numVisibleMenuItems++;
 			menuTextSelect.hidden = false;
 			menuTextSelect.setAttribute("tooltiptext",  getBrowserSelection());
-			menuTextSelect.setAttribute("oncommand", "omploader.ompLoadPasta(getBrowserSelection())");
+			menuTextSelect.setAttribute("oncommand", "omploader.ompLoadPasta()");
 			
 		}
 		else
@@ -159,40 +159,45 @@ var omploader = {
 	
 	onFilePageLoad: function(event, uri) {
 		if (event.originalTarget instanceof HTMLDocument) {
-			window.removeEventListener("load",  ompFileEvent, true);
 			var doc = event.originalTarget;
-			var frm = doc.forms.namedItem(this.formNames['file']);
-			var item = frm.elements.namedItem(this.postVars['file']);
-			try {
-				item.value = uri.spec;
-				frm.submit();
-			} catch(e) {
-				// alert(e);
+			if (doc.URL == this.ompFileURL) {
+				window.removeEventListener("load",  ompFileEvent, true);
+				var frm = doc.forms.namedItem(this.formNames['file']);
+				var item = frm.elements.namedItem(this.postVars['file']);
+				try {
+					item.value = uri.spec;
+					frm.submit();
+				} catch(e) {
+					// alert(e);
+				}
 			}
 		}
 
 	},
 	
-	ompLoadPasta: function(selection) {
+	ompLoadPasta: function() {
+		var focusedWindow = document.commandDispatcher.focusedWindow;  
+		var selected_text = focusedWindow.getSelection().toString();
 		var newTab = gBrowser.addTab(this.ompPastaURL);
 		gBrowser.selectedTab = newTab;
 		
-		window.addEventListener("load", ompPastaEvent = function(e) { omploader.onPastaPageLoad(e, selection); }, true);
+		window.addEventListener("load", ompPastaEvent = function(e) { omploader.onPastaPageLoad(e, selected_text); }, true);
 		
 	},
 	
-	onPastaPageLoad: function(event, selection) {
+	onPastaPageLoad: function(event, selected_text) {
 		if (event.originalTarget instanceof HTMLDocument) {
-			window.removeEventListener("load",  ompPastaEvent, true);
 			var doc = event.originalTarget;
-			var frm = doc.forms.namedItem(this.formNames['pasta']);
-			var item = frm.elements.namedItem(this.postVars['pasta']);
-			try {
-				item.value = selection;
-			} catch(e) {
-				// meh
+			if (doc.URL == this.ompPastaURL) {
+				window.removeEventListener("load",  ompPastaEvent, true);
+				var frm = doc.forms.namedItem(this.formNames['pasta']);
+				var item = frm.elements.namedItem(this.postVars['pasta']);
+				try {
+					item.value =  selected_text;
+				} catch(e) {
+					// meh
+				}
 			}
-			
 		}
 
 	},
