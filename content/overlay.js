@@ -12,9 +12,15 @@
 var omploader = {
 	onLoad: function() {
 		// initialization code
+		this.formNames = new Array();
+		this.formNames['file'] = "omploadfile";
+		this.formNames['pasta'] = "omploadpaste";
+		this.formNames['url'] = "omploadurl";
+		
 		this.postVars = new Array();
 		this.postVars['url'] = "url1";
 		this.postVars['file'] = "file1";
+		this.postVars['pasta'] = "paste";
 
 // 		this.ompHost = "http://test.peemail.org";  // for testing
 		this.ompHost = "http://omploader.org";
@@ -155,16 +161,14 @@ var omploader = {
 		if (event.originalTarget instanceof HTMLDocument) {
 			window.removeEventListener("load",  ompFileEvent, true);
 			var doc = event.originalTarget;
-			var element = doc.getElementsByTagName("input");
+			var frm = doc.forms.namedItem(this.formNames['file']);
+			var item = frm.elements.namedItem(this.postVars['file']);
 			try {
-				for (var cnt = 0; cnt < element.length; cnt++) {
-					if (element[cnt].name == "file1")
-						element[cnt].value = uri.spec;
-				}
+				item.value = uri.spec;
+				frm.submit();
 			} catch(e) {
-				// meh
+				// alert(e);
 			}
-			
 		}
 
 	},
@@ -181,12 +185,10 @@ var omploader = {
 		if (event.originalTarget instanceof HTMLDocument) {
 			window.removeEventListener("load",  ompPastaEvent, true);
 			var doc = event.originalTarget;
-			var element = doc.getElementsByTagName("textarea");
+			var frm = doc.forms.namedItem(this.formNames['pasta']);
+			var item = frm.elements.namedItem(this.postVars['pasta']);
 			try {
-				for (var cnt = 0; cnt < element.length; cnt++) {
-					if (element[cnt].name == "paste")
-						element[cnt].value = selection;
-				}
+				item.value = selection;
 			} catch(e) {
 				// meh
 			}
