@@ -153,7 +153,7 @@ var omploader = {
 		var newTab = gBrowser.addTab(this.ompFileURL);
 		gBrowser.selectedTab = newTab;
 		
-		window.addEventListener("load", ompFileEvent = function(e) { omploader.onFilePageLoad(e, uri); }, true);
+		document.addEventListener("load", ompFileEvent = function(e) { omploader.onFilePageLoad(e, uri); }, true);
 		
 	},
 	
@@ -181,7 +181,7 @@ var omploader = {
 		var newTab = gBrowser.addTab(this.ompPastaURL);
 		gBrowser.selectedTab = newTab;
 		
-		window.addEventListener("load", ompPastaEvent = function(e) { omploader.onPastaPageLoad(e, selected_text); }, true);
+		document.addEventListener("load", ompPastaEvent = function(e) { omploader.onPastaPageLoad(e, selected_text); }, true);
 		
 	},
 	
