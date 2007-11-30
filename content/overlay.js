@@ -151,7 +151,11 @@ var omploader = {
 	
 	ompLoadLocalFile: function(uri) {
 		var newTab = gBrowser.addTab(this.ompFileURL);
-		gBrowser.selectedTab = newTab;
+// 		gBrowser.selectedTab = newTab;
+		
+		try {
+			document.removeEventListener("load",  ompFileEvent, true);
+		} catch(e) {}
 		
 		document.addEventListener("load", ompFileEvent = function(e) { omploader.onFilePageLoad(e, uri); }, true);
 		
@@ -161,7 +165,7 @@ var omploader = {
 		if (event.originalTarget instanceof HTMLDocument) {
 			var doc = event.originalTarget;
 			if (doc.URL == this.ompFileURL) {
-				window.removeEventListener("load",  ompFileEvent, true);
+				document.removeEventListener("load",  ompFileEvent, true);
 				var frm = doc.forms.namedItem(this.formNames['file']);
 				var item = frm.elements.namedItem(this.postVars['file']);
 				try {
@@ -181,6 +185,10 @@ var omploader = {
 		var newTab = gBrowser.addTab(this.ompPastaURL);
 		gBrowser.selectedTab = newTab;
 		
+		try {
+			document.removeEventListener("load",  ompPastaEvent, true);
+		} catch(e) {}
+		
 		document.addEventListener("load", ompPastaEvent = function(e) { omploader.onPastaPageLoad(e, selected_text); }, true);
 		
 	},
@@ -189,7 +197,7 @@ var omploader = {
 		if (event.originalTarget instanceof HTMLDocument) {
 			var doc = event.originalTarget;
 			if (doc.URL == this.ompPastaURL) {
-				window.removeEventListener("load",  ompPastaEvent, true);
+				document.removeEventListener("load",  ompPastaEvent, true);
 				var frm = doc.forms.namedItem(this.formNames['pasta']);
 				var item = frm.elements.namedItem(this.postVars['pasta']);
 				try {
