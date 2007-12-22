@@ -151,60 +151,63 @@ var omploader = {
 	
 	ompLoadLocalFile: function(uri) {
 		var newTab = gBrowser.addTab(this.ompFileURL);
-// 		gBrowser.selectedTab = newTab;
 		
 		try {
-			document.removeEventListener("load",  ompFileEvent, true);
+			newTab.removeEventListener("load",  ompFileEvent, true);
 		} catch(e) {}
 		
-		document.addEventListener("load", ompFileEvent = function(e) { omploader.onFilePageLoad(e, uri); }, true);
+		newTab.addEventListener("load",
+			ompFileEvent = function(e) {
+						omploader.onFilePageLoad(e, uri);
+					}, true);
 		
+		//gBrowser.selectedTab = newTab; #open tab in foreground
 	},
 	
 	onFilePageLoad: function(event, uri) {
-		if (event.originalTarget instanceof HTMLDocument) {
-			var doc = event.originalTarget;
-			if (doc.URL == this.ompFileURL) {
-				document.removeEventListener("load",  ompFileEvent, true);
-				var frm = doc.forms.namedItem(this.formNames['file']);
-				var item = frm.elements.namedItem(this.postVars['file']);
-				try {
-					item.value = uri.spec;
-					frm.submit();
-				} catch(e) {
-					// alert(e);
-				}
+		var doc = event.target.linkedBrowser.contentDocument;
+		if (doc instanceof HTMLDocument) {
+			doc.removeEventListener("load",  ompFileEvent, true);
+			var frm = doc.forms.namedItem(this.formNames['file']);
+			var item = frm.elements.namedItem(this.postVars['file']);
+			try {
+				item.value = uri.spec;
+				frm.submit();
+			} catch(e) {
+				// alert(e);
 			}
 		}
 
 	},
 	
 	ompLoadPasta: function() {
-		var focusedWindow = document.commandDispatcher.focusedWindow;  
+		var focusedWindow = document.commandDispatcher.focusedWindow;
 		var selected_text = focusedWindow.getSelection().toString();
 		var newTab = gBrowser.addTab(this.ompPastaURL);
-		gBrowser.selectedTab = newTab;
 		
 		try {
-			document.removeEventListener("load",  ompPastaEvent, true);
+			newTab.removeEventListener("load",  ompPastaEvent, true);
 		} catch(e) {}
 		
-		document.addEventListener("load", ompPastaEvent = function(e) { omploader.onPastaPageLoad(e, selected_text); }, true);
+		newTab.addEventListener("load",
+			ompPastaEvent = function(e) {
+						omploader.onPastaPageLoad(e, selected_text);
+					}, true);
+		
+		gBrowser.selectedTab = newTab;
 		
 	},
 	
 	onPastaPageLoad: function(event, selected_text) {
-		if (event.originalTarget instanceof HTMLDocument) {
-			var doc = event.originalTarget;
-			if (doc.URL == this.ompPastaURL) {
-				document.removeEventListener("load",  ompPastaEvent, true);
-				var frm = doc.forms.namedItem(this.formNames['pasta']);
-				var item = frm.elements.namedItem(this.postVars['pasta']);
-				try {
-					item.value =  selected_text;
-				} catch(e) {
-					// meh
-				}
+		var doc = event.target.linkedBrowser.contentDocument;
+		if (doc instanceof HTMLDocument) {
+			doc.removeEventListener("load",  ompPastaEvent, true);
+			var frm = doc.forms.namedItem(this.formNames['pasta']);
+			var item = frm.elements.namedItem(this.postVars['pasta']);
+			try {
+				item.value =  selected_text;
+			} catch(e) {
+				// meh
 			}
 		}
 
