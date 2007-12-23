@@ -150,36 +150,40 @@ var omploader = {
 	},
 	
 	ompLoadLocalFile: function(uri) {
-		var newTab = gBrowser.addTab(this.ompFileURL);
+		var newTab = gBrowser.addTab();
+		var tabBr = gBrowser.getBrowserForTab(newTab);
+		var doc = tabBr.contentDocument;
 		
-		try {
-			newTab.removeEventListener("load",  ompFileEvent, true);
-		} catch(e) {}
+		var sbmt = null;
+		var frm = doc.createElementNS("http://www.w3.org/1999/xhtml", "form");
+
+		frm.setAttribute("name", this.formNames['file']);
+	
+		frm.setAttribute("action", this.ompURL);
+		frm.setAttribute("method", "POST");
+		frm.setAttribute("enctype", "multipart/form-data");
+		frm.setAttribute("style", "display: none;");
+		frm.setAttribute("accept-charset", "UTF-8");
+	
+		var inp = doc.createElementNS("http://www.w3.org/1999/xhtml", "input");
+		inp.setAttribute("type", "file");
+		inp.setAttribute("name", this.postVars['file']);
+		inp.value = uri.spec;
+		frm.appendChild(inp);
 		
-		newTab.addEventListener("load",
-			ompFileEvent = function(e) {
-						omploader.onFilePageLoad(e, uri);
-					}, true);
+		sbmt = doc.createElementNS("http://www.w3.org/1999/xhtml", "input");
+		sbmt.setAttribute("type", "submit");
+		sbmt.setAttribute("name", "submit");
+		sbmt.setAttribute("value", "submit");
+		frm.appendChild(sbmt);
+	
+		doc.documentElement.appendChild(frm);
+	
+		frm.submit();
 		
 		//gBrowser.selectedTab = newTab; #open tab in foreground
 	},
-	
-	onFilePageLoad: function(event, uri) {
-		var doc = event.target.linkedBrowser.contentDocument;
-		if (doc instanceof HTMLDocument) {
-			doc.removeEventListener("load",  ompFileEvent, true);
-			var frm = doc.forms.namedItem(this.formNames['file']);
-			var item = frm.elements.namedItem(this.postVars['file']);
-			try {
-				item.value = uri.spec;
-				frm.submit();
-			} catch(e) {
-				// alert(e);
-			}
-		}
 
-	},
-	
 	ompLoadPasta: function() {
 		var focusedWindow = document.commandDispatcher.focusedWindow;
 		var selected_text = focusedWindow.getSelection().toString();
@@ -201,11 +205,11 @@ var omploader = {
 	onPastaPageLoad: function(event, selected_text) {
 		var doc = event.target.linkedBrowser.contentDocument;
 		if (doc instanceof HTMLDocument) {
-			doc.removeEventListener("load",  ompPastaEvent, true);
-			var frm = doc.forms.namedItem(this.formNames['pasta']);
-			var item = frm.elements.namedItem(this.postVars['pasta']);
 			try {
-				item.value =  selected_text;
+				var frm = doc.forms.namedItem(this.formNames['pasta']);
+				var item = frm.elements.namedItem(this.postVars['pasta']);
+				item.value = selected_text;
+				doc.removeEventListener("load",  ompPastaEvent, true);
 			} catch(e) {
 				// meh
 			}
