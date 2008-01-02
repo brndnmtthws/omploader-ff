@@ -1,9 +1,9 @@
 /*
  * $Id$
  *
- * Copyright 2007 David Shakaryan <omp@gentoo.org>
- * Copyright 2007 Brenden Matthews <brenden@rty.ca>
- * Copyright 2007 Jeff Glover <jeff.web@sigmatheory.com>
+ * Copyright 2007-2008 David Shakaryan <omp@gentoo.org>
+ * Copyright 2007-2008 Brenden Matthews <brenden@rty.ca>
+ * Copyright 2007-2008 Jeff Glover <jeff.web@sigmatheory.com>
  *
  * Distributed under the terms of the GNU General Public License v3
  *
