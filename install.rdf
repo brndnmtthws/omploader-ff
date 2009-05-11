@@ -4,7 +4,7 @@
   <Description about="urn:mozilla:install-manifest">
     <em:id>brenden@rty.ca</em:id>
     <em:name>omploader</em:name>
-    <em:version>0.2.7</em:version>
+    <em:version>0.2.8</em:version>
     <em:creator>Steve French</em:creator>
     <em:contributor>Joe Myre</em:contributor>
     <em:contributor>Brenden Matthews</em:contributor>
