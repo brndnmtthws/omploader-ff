@@ -10,15 +10,14 @@
     <em:contributor>Brenden Matthews</em:contributor>
     <em:contributor>Jeff Glover</em:contributor>
     <em:homepageURL>http://omploader.org</em:homepageURL>
-	<em:description>just doit™</em:description>
+    <em:description>just doit™</em:description>
     <em:iconURL>chrome://omploader/content/omploader.png</em:iconURL>
     <em:targetApplication>
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
-	<!-- version numbers must conform to:
-	https://addons.mozilla.org/en-US/firefox/pages/appversions -->
+<!-- version numbers must conform to: https://addons.mozilla.org/en-US/firefox/pages/appversions -->
         <em:minVersion>1.5</em:minVersion>
-	<em:maxVersion>3.1b3pre</em:maxVersion>
+        <em:maxVersion>3.5.*</em:maxVersion>
       </Description>
     </em:targetApplication>
   </Description>
