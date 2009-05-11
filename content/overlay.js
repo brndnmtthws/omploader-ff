@@ -12,11 +12,14 @@
 var omploader = {
 	onLoad: function() {
 		// initialization code
+        this.videoURLs = new Array();
+        this.videoURLs[0] = "youtube.com/watch";
+
 		this.formNames = new Array();
 		this.formNames['file'] = "omploadfile";
 		this.formNames['pasta'] = "omploadpaste";
 		this.formNames['url'] = "omploadurl";
-		
+
 		this.postVars = new Array();
 		this.postVars['url'] = "url1";
 		this.postVars['file'] = "file1";
@@ -49,55 +52,76 @@ var omploader = {
 		var menuBGImage = document.getElementById("omploader-bgimage-menuitem");
 		var menuLink = document.getElementById("omploader-link-menuitem");
 		var menuPage = document.getElementById("omploader-page-menuitem");
+        var menuVid = document.getElementById("omploader-video-menuitem");
 		var menuTextSelect = document.getElementById("omploader-textselect-menuitem");
+        var pageuri = omploader.URLtoURI(content.document.location.href);
 
-		var numVisibleMenuItems = 0;
-	
+        // The Page item is always visible
+        // I don't remember why I did this in the first place
+        // but it could be useful in the future
+        var numVisibleMenuItems = 1
+
+        menuPage.setAttribute("tooltiptext", pageuri.spec);
+        menuPage.setAttribute("label", omploader.strings.getString("pagelabel"));
+        menuPage.setAttribute("oncommand", "omploader.onMenuItemCommand(event)");
+        if (omploader.get_filename(pageuri.spec).lastIndexOf('.') != -1)
+            menuPage.setAttribute("label", omploader.strings.getString("pagelabel") + " or " + omploader.strings.getString("filelabel"));
+
+        menuImage.hidden = true;
+        menuImage.setAttribute("label", omploader.strings.getString("imagelabel"));
+
+        menuBGImage.hidden = true;
+        menuBGImage.setAttribute("label", omploader.strings.getString("bgimagelabel"));
+
+        menuLink.hidden = true;
+        menuLink.setAttribute("label", omploader.strings.getString("linklabel"));
+
+        menuTextSelect.hidden = true;
+        menuTextSelect.setAttribute("label", omploader.strings.getString("textselectlabel"));
+
+        menuVid.hidden = true;
+        menuVid.setAttribute("label", omploader.strings.getString("videolabel"));
+        menuVid.setAttribute("tooltiptext", pageuri.spec);
+
 		if(gContextMenu.onImage) {
 			numVisibleMenuItems++;
 			menuImage.hidden = false;
+            menuImage.setAttribute("label", omploader.strings.getString("imagelabel") +
+                    omploader.get_filename_fmt(gContextMenu.target.currentURI.spec));
 			menuImage.setAttribute("tooltiptext", gContextMenu.target.currentURI.spec);
 			menuImage.setAttribute("oncommand", "omploader.onContextMenuItemCommand(gContextMenu.target.currentURI)");
 		}
-		else
-			menuImage.hidden = true;
-	
+
 		if(gContextMenu.hasBGImage) {
 			var uri = omploader.URLtoURI(gContextMenu.bgImageURL);
 			numVisibleMenuItems++;
 			menuBGImage.hidden = false;
+            menuBGImage.setAttribute("label", omploader.strings.getString("bgimagelabel") +
+                    omploader.get_filename_fmt(gContextMenu.bgImageURL));
 			menuBGImage.setAttribute("tooltiptext", gContextMenu.bgImageURL);
 			menuBGImage.setAttribute("oncommand", "omploader.onMenuItemURLCommand(gContextMenu.bgImageURL)");
 		}
-		else
-			menuBGImage.hidden = true;
-	
+
 		if(gContextMenu.onLink) {
 			numVisibleMenuItems++;
 			menuLink.hidden = false;
+            menuLink.setAttribute("label", omploader.strings.getString("linklabel") + ": " + gContextMenu.linkURI.spec);
 			menuLink.setAttribute("tooltiptext", gContextMenu.linkURI.spec);
 			menuLink.setAttribute("oncommand", "omploader.onContextMenuItemCommand(gContextMenu.linkURI)");
 		}
-		else
-			menuLink.hidden = true;
-		
+
+        for (key in omploader.videoURLs) {
+            if (pageuri.spec.indexOf(omploader.videoURLs[key]) != -1)
+                menuVid.hidden = false;
+        }
+
 		if (gContextMenu.isTextSelected)
 		{
 			numVisibleMenuItems++;
 			menuTextSelect.hidden = false;
 			menuTextSelect.setAttribute("tooltiptext",  getBrowserSelection());
 			menuTextSelect.setAttribute("oncommand", "omploader.ompLoadPasta()");
-			
 		}
-		else
-			menuTextSelect.hidden = true;
-	
-		var pageuri = omploader.URLtoURI(content.document.location.href);
-
-		numVisibleMenuItems++;
-		menuPage.hidden = false;
-		menuPage.setAttribute("tooltiptext", pageuri.spec);
-
 
 		if (numVisibleMenuItems > 0) {
 			menuMain.setAttribute("tooltiptext", omploader.strings.getString("omploaderLabel"));
@@ -119,9 +143,7 @@ var omploader = {
 
 	onMenuItemCommand: function(e) {
 		var uri;
-
 		uri = this.URLtoURI(content.document.location.href);
-
 		this.ompLoadURI(uri);
 	},
 
@@ -148,39 +170,39 @@ var omploader = {
 		else
 			this.ompLoadPostData(uri);
 	},
-	
+
 	ompLoadLocalFile: function(uri) {
 		var newTab = gBrowser.addTab();
 		var tabBr = gBrowser.getBrowserForTab(newTab);
 		var doc = tabBr.contentDocument;
-		
+
 		var sbmt = null;
 		var frm = doc.createElementNS("http://www.w3.org/1999/xhtml", "form");
 
 		frm.setAttribute("name", this.formNames['file']);
-	
+
 		frm.setAttribute("action", this.ompURL);
 		frm.setAttribute("method", "POST");
 		frm.setAttribute("enctype", "multipart/form-data");
 		frm.setAttribute("style", "display: none;");
 		frm.setAttribute("accept-charset", "UTF-8");
-	
+
 		var inp = doc.createElementNS("http://www.w3.org/1999/xhtml", "input");
 		inp.setAttribute("type", "file");
 		inp.setAttribute("name", this.postVars['file']);
 		inp.value = uri.spec;
 		frm.appendChild(inp);
-		
+
 		sbmt = doc.createElementNS("http://www.w3.org/1999/xhtml", "input");
 		sbmt.setAttribute("type", "submit");
 		sbmt.setAttribute("name", "submit");
 		sbmt.setAttribute("value", "submit");
 		frm.appendChild(sbmt);
-	
+
 		doc.documentElement.appendChild(frm);
-	
+
 		frm.submit();
-		
+
 		//gBrowser.selectedTab = newTab; #open tab in foreground
 	},
 
@@ -188,20 +210,20 @@ var omploader = {
 		var focusedWindow = document.commandDispatcher.focusedWindow;
 		var selected_text = focusedWindow.getSelection().toString();
 		var newTab = gBrowser.addTab(this.ompPastaURL);
-		
+
 		try {
 			newTab.removeEventListener("load",  ompPastaEvent, true);
 		} catch(e) {}
-		
+
 		newTab.addEventListener("load",
 			ompPastaEvent = function(e) {
 						omploader.onPastaPageLoad(e, selected_text);
 					}, true);
-		
+
 		gBrowser.selectedTab = newTab;
-		
+
 	},
-	
+
 	onPastaPageLoad: function(event, selected_text) {
 		var doc = event.target.linkedBrowser.contentDocument;
 		if (doc instanceof HTMLDocument) {
@@ -216,11 +238,11 @@ var omploader = {
 		}
 
 	},
-	
+
 	ompLoadPostData: function(uri) {
-	
+
 		var dataString = this.postVars['url'] + "=" + uri.spec;
-		
+
 		// POST method requests must wrap the encoded text in a MIME
 		// stream
 		var stringStream = this.Cc["@mozilla.org/io/string-input-stream;1"].
@@ -229,15 +251,32 @@ var omploader = {
 			stringStream.data = dataString;
 		else // 1.8 or older
 			stringStream.setData(dataString, dataString.length);
-	
+
 		var postData = this.Cc["@mozilla.org/network/mime-input-stream;1"].
 			createInstance(this.Ci.nsIMIMEInputStream);
 		postData.addHeader("Content-Type", "application/x-www-form-urlencoded");
 		postData.addContentLength = true;
 		postData.setData(stringStream);
-	
+
 		gBrowser.addTab(this.ompURL, uri, null, postData);
-	}
+	},
+
+    get_filename: function(str) {
+        var slash = '/';
+        var retval = '';
+        if (str.match(/\\/))
+            slash = '\\';
+
+        return str.substring(str.lastIndexOf(slash) + 1);
+    },
+
+    get_filename_fmt: function(str) {
+        var retval = this.get_filename(str);
+        if (retval != '')
+            retval = ": " + retval;
+
+        return retval;
+    }
 
 };
 

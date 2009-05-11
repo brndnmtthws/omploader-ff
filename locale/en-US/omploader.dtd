@@ -1,10 +1,5 @@
 <!ENTITY omploader.label "Ompload!">
 <!ENTITY omploaderContext.label "Ompload!">
 <!ENTITY omploaderContext.accesskey "o">
-<!ENTITY omploaderContext.imagelabel "Image">
-<!ENTITY omploaderContext.bgimagelabel "BG Image">
-<!ENTITY omploaderContext.linklabel "Link">
-<!ENTITY omploaderContext.pagelabel "Page">
-<!ENTITY omploaderContext.textselectlabel "Pasta selected text">
 <!ENTITY omploaderToolbar.label "Ompload!">
 <!ENTITY omploaderToolbar.tooltip "Ompload!">

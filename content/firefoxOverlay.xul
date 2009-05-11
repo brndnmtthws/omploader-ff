@@ -9,27 +9,22 @@
   </stringbundleset>
 
   <menupopup id="menu_ToolsPopup" onpopupshowing="omploader.updateToolsPopup(event)">
-    <menuitem id="omploader-tools" label="&omploader.label;" 
+    <menuitem id="omploader-tools" label="&omploader.label;"
               oncommand="omploader.onMenuItemCommand(event)"
 	      accesskey="&omploaderContext.accesskey;"
 	      class="menuitem-iconic"/>
   </menupopup>
-	
+
 	<popup id="contentAreaContextMenu">
 		<menu id="context-omploader" label="&omploaderContext.label;" insertafter="context-stop" accesskey="&omploaderContext.accesskey;"
 		class="menu-iconic">
 			<menupopup id="context-omploader-popup-menu">
-				<menuitem id="omploader-image-menuitem"
-					label="&omploaderContext.imagelabel;"/>
-				<menuitem id="omploader-bgimage-menuitem"
-					label="&omploaderContext.bgimagelabel;"/>
-				<menuitem id="omploader-link-menuitem"
-					label="&omploaderContext.linklabel;"/>
-				<menuitem id="omploader-page-menuitem"
-					label="&omploaderContext.pagelabel;"
-					oncommand="omploader.onMenuItemCommand(event)"/>
-				<menuitem id="omploader-textselect-menuitem"
-					label="&omploaderContext.textselectlabel;"/>
+				<menuitem id="omploader-image-menuitem"/>
+				<menuitem id="omploader-bgimage-menuitem"/>
+				<menuitem id="omploader-link-menuitem"/>
+                <menuitem id="omploader-video-menuitem"/>
+				<menuitem id="omploader-page-menuitem"/>
+				<menuitem id="omploader-textselect-menuitem"/>
 			</menupopup>
 		</menu>
 	</popup>
