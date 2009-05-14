@@ -19,10 +19,10 @@
 		<menu id="context-omploader" label="&omploaderContext.label;" insertafter="context-stop" accesskey="&omploaderContext.accesskey;"
 		class="menu-iconic">
 			<menupopup id="context-omploader-popup-menu">
+				<menuitem id="omploader-video-menuitem"/>
 				<menuitem id="omploader-image-menuitem"/>
 				<menuitem id="omploader-bgimage-menuitem"/>
 				<menuitem id="omploader-link-menuitem"/>
-                <menuitem id="omploader-video-menuitem"/>
 				<menuitem id="omploader-page-menuitem"/>
 				<menuitem id="omploader-textselect-menuitem"/>
 			</menupopup>

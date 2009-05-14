@@ -12,8 +12,9 @@
 var omploader = {
 	onLoad: function() {
 		// initialization code
-        this.videoURLs = new Array();
-        this.videoURLs[0] = "youtube.com/watch";
+		this.videors = new Array();
+		this.videors['youtube'] = "youtube.com/watch";
+// 		this.videors['youtube'] = new Youtube();
 
 		this.formNames = new Array();
 		this.formNames['file'] = "omploadfile";
@@ -52,9 +53,10 @@ var omploader = {
 		var menuBGImage = document.getElementById("omploader-bgimage-menuitem");
 		var menuLink = document.getElementById("omploader-link-menuitem");
 		var menuPage = document.getElementById("omploader-page-menuitem");
-        var menuVid = document.getElementById("omploader-video-menuitem");
 		var menuTextSelect = document.getElementById("omploader-textselect-menuitem");
         var pageuri = omploader.URLtoURI(content.document.location.href);
+		var menuVid = document.getElementById("omploader-video-menuitem");
+		menuVid.hidden = true;
 
         // The Page item is always visible
         // I don't remember why I did this in the first place
@@ -110,10 +112,14 @@ var omploader = {
 			menuLink.setAttribute("oncommand", "omploader.onContextMenuItemCommand(gContextMenu.linkURI)");
 		}
 
-        for (key in omploader.videoURLs) {
-            if (pageuri.spec.indexOf(omploader.videoURLs[key]) != -1)
-                menuVid.hidden = false;
+        for (key in omploader.videors) {
+            if (pageuri.spec.indexOf(omploader.videors[key]) != -1) {
+				menuVid.hidden = false;
+				menuVid.setAttribute("label", omploader.strings.getString("videolabel"));
+				menuVid.setAttribute("oncommand", "omploader.onMenuItemCommand(event)");
+			}
         }
+// 		omploader.videors['youtube'].doit(menuVid);
 
 		if (gContextMenu.isTextSelected)
 		{
@@ -279,6 +285,47 @@ var omploader = {
     }
 
 };
+
+// maybe some fag will make a better version of this work
+// function Youtube () {
+// 	this.reurl = "^((?:http://)?(?:\w+\.)?youtube\.com/(?:(?:v/)|(?:(?:watch(?:\.php)?)?\?(?:.+&)?v=)))?([0-9A-Za-z_-]+)(?(1).+)?$";
+//
+// 	this.menuitems = new Array();
+//
+// 	this.vid_formats = new Array();
+// 	this.vid_formats['flv'] = new vid_format('', 'FLV', '');
+// 	this.vid_formats['flv_hq'] = new vid_format('35', 'FLV High Quality', '35/640000/9/0/115');
+// 	this.vid_formats['mp4'] = new vid_format('18', 'MPEG-4 H.264', '18/512000/9/0/115');
+// 	this.vid_formats['mp4_hq'] = new vid_format('22', 'MPEG-4 H.264 HQ', '22/2000000/9/0/115');
+//
+// 	this.doit = function(menu_original) {
+// 		if (this.menuitems.length > 0) {
+// 			for  (key in this.menuitems)
+// 				menu_original.parentNode.removeChild(this.menuitems[key]);
+// 		}
+// 		this.menuitems = new Array();
+//
+// 		for (key in this.vid_formats) {
+// 			this.menuitems[key] = document.createElement('menuitem');
+// 			this.menuitems[key].setAttribute('id', 'videor-menu' + key);
+// 			this.menuitems[key].setAttribute('label', this.vid_formats[key].label);
+// 			this.menuitems[key].hidden = false;
+// 			menu_original.parentNode.insertBefore( this.menuitems[key], menu_original.nextSibling );
+//
+// 		}
+//         return this.color + ' ' + this.type + ' apple';
+//     };
+//
+// 	function vid_format(idx, label, fmt_map) {
+// 		this.idx = idx;
+// 		this.label = label;
+// 		this.fmt_map = fmt_map;
+// 		this.enabled = false;
+// 	};
+// }
+
+// };
+
 
 window.addEventListener("load", function(e) { omploader.onLoad(e); }, false);
 
