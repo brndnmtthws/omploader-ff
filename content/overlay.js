@@ -55,8 +55,6 @@ var omploader = {
 		var menuPage = document.getElementById("omploader-page-menuitem");
 		var menuTextSelect = document.getElementById("omploader-textselect-menuitem");
         var pageuri = omploader.URLtoURI(content.document.location.href);
-		var menuVid = document.getElementById("omploader-video-menuitem");
-		menuVid.hidden = true;
 
         // The Page item is always visible
         // I don't remember why I did this in the first place
@@ -64,10 +62,11 @@ var omploader = {
         var numVisibleMenuItems = 1
 
         menuPage.setAttribute("tooltiptext", pageuri.spec);
-        menuPage.setAttribute("label", omploader.strings.getString("pagelabel"));
+		var pagelabel = omploader.label_video_url(pageuri.spec, "pagelabel", "videolabel");
+        menuPage.setAttribute("label", pagelabel);
         menuPage.setAttribute("oncommand", "omploader.onMenuItemCommand(event)");
         if (omploader.get_filename(pageuri.spec).lastIndexOf('.') != -1)
-            menuPage.setAttribute("label", omploader.strings.getString("pagelabel") + " or " + omploader.strings.getString("filelabel"));
+            menuPage.setAttribute("label", pagelabel + "/" + omploader.strings.getString("filelabel"));
 
         menuImage.hidden = true;
         menuImage.setAttribute("label", omploader.strings.getString("imagelabel"));
@@ -80,10 +79,6 @@ var omploader = {
 
         menuTextSelect.hidden = true;
         menuTextSelect.setAttribute("label", omploader.strings.getString("textselectlabel"));
-
-        menuVid.hidden = true;
-        menuVid.setAttribute("label", omploader.strings.getString("videolabel"));
-        menuVid.setAttribute("tooltiptext", pageuri.spec);
 
 		if(gContextMenu.onImage) {
 			numVisibleMenuItems++;
@@ -107,18 +102,10 @@ var omploader = {
 		if(gContextMenu.onLink) {
 			numVisibleMenuItems++;
 			menuLink.hidden = false;
-            menuLink.setAttribute("label", omploader.strings.getString("linklabel") + ": " + gContextMenu.linkURI.spec);
+            menuLink.setAttribute("label", omploader.label_video_url(gContextMenu.linkURI.spec, "linklabel", "videolabel") + ": " + gContextMenu.linkURI.spec);
 			menuLink.setAttribute("tooltiptext", gContextMenu.linkURI.spec);
 			menuLink.setAttribute("oncommand", "omploader.onContextMenuItemCommand(gContextMenu.linkURI)");
 		}
-
-        for (key in omploader.videors) {
-            if (pageuri.spec.indexOf(omploader.videors[key]) != -1) {
-				menuVid.hidden = false;
-				menuVid.setAttribute("label", omploader.strings.getString("videolabel"));
-				menuVid.setAttribute("oncommand", "omploader.onMenuItemCommand(event)");
-			}
-        }
 
 		if (gContextMenu.isTextSelected)
 		{
@@ -136,6 +123,15 @@ var omploader = {
 			menuMain.setAttribute("tooltiptext", omploader.strings.getString("disableFile"));
 			menuMain.setAttribute("disabled", "true");
 		}
+	},
+
+	label_video_url: function(url, default_label, video_label) {
+		var result = this.strings.getString(default_label);
+		for (key in this.videors) {
+			if (url.indexOf(this.videors[key]) != -1)
+				result = this.strings.getString(video_label);
+        }
+		return result;
 	},
 
 	onContextMenuItemCommand: function(uri) {

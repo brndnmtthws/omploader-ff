@@ -4,13 +4,13 @@
   <Description about="urn:mozilla:install-manifest">
     <em:id>brenden@rty.ca</em:id>
     <em:name>omploader</em:name>
-    <em:version>0.2.8</em:version>
+    <em:version>0.2.9</em:version>
     <em:creator>Steve French</em:creator>
     <em:contributor>Joe Myre</em:contributor>
     <em:contributor>Brenden Matthews</em:contributor>
     <em:contributor>Jeff Glover</em:contributor>
     <em:homepageURL>http://omploader.org</em:homepageURL>
-    <em:description>just doit™</em:description>
+    <em:description>free, lean and mean image &amp; file hosting</em:description>
     <em:iconURL>chrome://omploader/content/omploader.png</em:iconURL>
     <em:targetApplication>
       <Description>
